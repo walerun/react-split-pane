@@ -2,37 +2,164 @@ import React, {Component} from 'react';
 import {render} from 'react-dom';
 import SplitPane from '../lib/SplitPane';
 import Pane from "../lib/Pane";
+import Layout from "../lib/Layout";
 
-
-const SimpleExample = () => {
-  return (
-    <section>
-
-      <pre className="source">
-        {`
-        <SplitPane split="vertical">
-          <Pane>You can use a Pane component</Pane>
-          <div>or you can use a plain old div</div>
-          <Pane initialSize="25%" minSize="10%" maxSize="500px">Using a Pane allows you to specify any constraints
-            directly</Pane>
-        </SplitPane>
-        `}
-      </pre>
-
-      <div className="example">
-
-        <SplitPane split="vertical">
-          <Pane>You can use a Pane component</Pane>
-          <div>or you can use a plain old div</div>
-          <Pane initialSize="25%" minSize="10%" maxSize="500px">Using a Pane allows you to specify any constraints
-            directly</Pane>
-        </SplitPane>
-
-      </div>
-
-    </section>
-  );
+const config = {
+  "direction": "row",
+  "panes": [
+      {
+          "direction": "column",
+          "size": "250px",
+          "panes": [
+              {
+                  "size": "25%",
+                  "minSize": "200px",
+                  "id": "filtered-dimensions-top"
+              },
+              {
+                  "id": "filtered-dimensions-bottom"
+              }
+          ]
+      },
+      {
+          "id": "edit-form-sheet"
+      }
+  ]
 };
+
+const config2 = {
+  "direction": "column",
+  "panes": [
+      {
+          "size": "250px",
+          "id": "filtered-dimensions-top"
+      },
+      {
+          "id": "filtered-dimensions-bottom"
+      }
+  ]
+};
+
+const config3 = {
+  direction: "column",
+  panes: [
+    {
+      size: "80px",
+      direction: "row",
+      panes: [
+        {
+          size: "40px"
+        },
+        {
+          id: "leftactions"
+        }
+      ]
+    },
+    {
+      direction: "row",
+      panes: [
+        {
+          id: "topactions",
+          size: 2
+        },
+        {
+          id: "product-analysis-subclass-top",
+          size: "10%"
+        },
+        {
+          id: "product-analysis-subclass-bottom"
+        },
+        {
+          id: "product-analysis-subclass-bottom 2"
+        }
+      ]
+    }
+  ]
+};
+
+class ControlledExample extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      value: config
+    };
+  }
+
+  onChange = (value) => {
+    this.setState({value});
+  };
+
+  render() {
+    return (
+      <section>
+  
+        <pre className="source">
+          {`
+          <Layout value={}/>
+          `}
+        </pre>
+  
+        <div className="example">
+  
+          <Layout value={this.state.value} onChange={this.onChange} renderTile={id => `Tile ${id}`}/>
+  
+        </div>
+  
+      </section>
+    );
+  }
+}
+
+class SimpleExample extends Component {
+  constructor(props) {
+    super(props);
+
+    const str = localStorage.getItem("paneSizes");
+    const sizes = JSON.parse(str);
+
+    this.state = {
+      sizes
+    };
+  }
+
+  handleChangeSize(size) {
+    console.log(size);
+    localStorage.setItem("paneSizes", JSON.stringify(size));
+  }
+
+  render() {
+    const sizes = this.state.sizes;
+
+    return (
+      <section>
+  
+        <pre className="source">
+          {`
+          <SplitPane split="vertical">
+            <Pane>You can use a Pane component</Pane>
+            <div>or you can use a plain old div</div>
+            <Pane initialSize="25%" minSize="10%" maxSize="500px">Using a Pane allows you to specify any constraints
+              directly</Pane>
+          </SplitPane>
+          `}
+        </pre>
+  
+        <div className="example">
+  
+          <SplitPane split="vertical" onChangeSize={this.handleChangeSize}>
+            <Pane initialSize={sizes[0]} maxSize="200px"><div>You can use a Pane component1</div><div>test</div></Pane>
+            <div>or you can use a plain old div</div>
+            <Pane initialSize="15%" minSize="10%" maxSize="500px">Using a Pane allows you to specify any constraints
+              directly</Pane>
+          </SplitPane>
+  
+        </div>
+  
+      </section>
+    );
+  }
+}
 
 
 const SimpleNestedExample = () => {
@@ -634,6 +761,7 @@ const SubComponentExample = () => {
 
 
 const examples = {
+  ControlledExample,
   SimpleExample,
   SimpleNestedExample,
   MultiplePropsNestedExample,
@@ -661,9 +789,9 @@ const examples = {
 
 
 const name = document.location.search.substr(1);
-const component = examples[name];
-if (component) {
-  render(component(), document.getElementById('root'));
+const Comp = examples[name];
+if (Comp) {
+  render(<Comp/>, document.getElementById('root'));
 }
 
 
