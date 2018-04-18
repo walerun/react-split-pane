@@ -10,23 +10,23 @@ const ColumnStyle = glamorous.div({
   display: 'flex',
   height: '100%',
   flexDirection: 'column',
-  // flex: 1,
-  // outline: 'none',
-  // overflow: 'hidden',
-  // userSelect: 'text',
+  flex: 1,
+  outline: 'none',
+  overflow: 'hidden',
+  userSelect: 'text',
 
-  // minHeight: '100%',
-  // width: '100%',
+  minHeight: '100%',
+  width: '100%',
 });
 
 const RowStyle = glamorous.div({
   display: 'flex',
   height: '100%',
   flexDirection: 'row',
-  // flex: 1,
-  // outline: 'none',
-  // overflow: 'hidden',
-  // userSelect: 'text',
+  flex: 1,
+  outline: 'none',
+  overflow: 'hidden',
+  userSelect: 'text',
 
 });
 

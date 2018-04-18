@@ -23,8 +23,9 @@ const RowFlex = ({ initialSize, minSize, maxSize }) => {
     // flex: initialSize,
     minWidth: minSize,
     maxWidth: maxSize,
-    // display: 'flex',
-    // outline: 'none'
+    display: 'flex',
+    outline: 'none',
+    position: 'relative'
   };
 
   if (typeof initialSize === "number") {
@@ -41,9 +42,10 @@ const ColumnFlex = ({ initialSize, minSize, maxSize }) => {
   const style = {
     minHeight: minSize,
     maxHeight: maxSize,
-    // display: 'flex',
-    // outline: 'none',
-    flexShrink: 1
+    display: 'flex',
+    outline: 'none',
+    flexShrink: 1,
+    position: 'relative'
   };
 
   if (typeof initialSize === "number") {

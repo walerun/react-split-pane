@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import Pane from "./Pane";
 import SplitPane from "./SplitPane";
 
-export default class Layout extends Component {
+export default class TileLayout extends Component {
   static propTypes = {
     renderTile: PropTypes.func,
     onChange: PropTypes.func,
