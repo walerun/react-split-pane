@@ -22,7 +22,7 @@
     "es6"
   ],
   "files": [
-    "src/**/*"
+    "lib/**/*"
   ],
   "dependencies": {
     "glamor": "^2.20.40",
