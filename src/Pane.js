@@ -17,21 +17,44 @@ const ColumnPx = ({ useInitial, initialSize, size, minSize, maxSize }) => ({
   outline: 'none',
 });
 
-const RowFlex = ({ ratio, minSize, maxSize }) => ({
-  flex: ratio * 100,
-  minWidth: minSize,
-  maxWidth: maxSize,
-  display: 'flex',
-  outline: 'none',
-});
+const RowFlex = ({ initialSize, minSize, maxSize }) => {
 
-const ColumnFlex = ({ ratio, minSize, maxSize }) => ({
-  flex: ratio * 100,
-  minHeight: minSize,
-  maxHeight: maxSize,
-  display: 'flex',
-  outline: 'none',
-});
+  const style = {
+    // flex: initialSize,
+    minWidth: minSize,
+    maxWidth: maxSize,
+    // display: 'flex',
+    // outline: 'none'
+  };
+
+  if (typeof initialSize === "number") {
+    style.flex = initialSize;
+  } else {
+    style.flexGrow = 0;
+    style.width = initialSize;
+  }
+
+  return style;
+};
+
+const ColumnFlex = ({ initialSize, minSize, maxSize }) => {
+  const style = {
+    minHeight: minSize,
+    maxHeight: maxSize,
+    // display: 'flex',
+    // outline: 'none',
+    flexShrink: 1
+  };
+
+  if (typeof initialSize === "number") {
+    style.flex = initialSize;
+  } else {
+    style.flexGrow = 0;
+    style.height = initialSize;
+  }
+
+  return style;
+};
 
 
 class Pane extends PureComponent {
@@ -47,21 +70,12 @@ class Pane extends PureComponent {
 
     let prefixedStyle;
 
-    //console.log(`Pane.render`, resized && !(useInitial && initialSize), resized, useInitial, initialSize);
-
-    if (resized && !(useInitial && initialSize)) {
-      if (split === 'vertical') {
-        prefixedStyle = prefixAll(RowFlex(this.props));
-      } else {
-        prefixedStyle = prefixAll(ColumnFlex(this.props));
-      }
+    if (split === 'vertical') {
+      prefixedStyle = prefixAll(RowFlex(this.props));
     } else {
-      if (split === 'vertical') {
-        prefixedStyle = prefixAll(RowPx(this.props));
-      } else {
-        prefixedStyle = prefixAll(ColumnPx(this.props));
-      }
+      prefixedStyle = prefixAll(ColumnFlex(this.props));
     }
+
     return (
       <div className={className} style={prefixedStyle}>
         {children}
@@ -73,12 +87,13 @@ class Pane extends PureComponent {
 Pane.propTypes = {
   children: PropTypes.node,
   className: PropTypes.string,
-  initialSize: PropTypes.string,
+  initialSize: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   minSize: PropTypes.string,
   maxSize: PropTypes.string,
 };
 
 Pane.defaultProps = {
+  initialSize: 1,
   split: 'vertical',
   minSize: '0px',
   maxSize: '100%',
