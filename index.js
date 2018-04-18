@@ -1,3 +1,3 @@
-var SplitPane = require('./lib/Layout');
+var Layout = require('./src/Layout');
 
-module.exports = SplitPane;
+module.exports = Layout;
