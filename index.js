@@ -1,3 +1,3 @@
-var Layout = require('./src/Layout');
+var Layout = require('./lib/Layout');
 
 module.exports = Layout;
