@@ -96,7 +96,9 @@ class SplitPane extends Component {
   }
 
   onDown = (resizerIndex) => {
-    if (!this.props.allowResize) {
+    const {allowResize, onResizeStart} = this.props;
+
+    if (!allowResize) {
       return;
     }
 
@@ -104,6 +106,10 @@ class SplitPane extends Component {
 
     document.addEventListener('mousemove', this.onMouseMove);
     document.addEventListener('mouseup', this.onMouseUp);
+
+    if (onResizeStart) {
+      onResizeStart(resizerIndex);
+    }
 
     this.setState({
       resizerIndex,
@@ -127,9 +133,9 @@ class SplitPane extends Component {
     document.removeEventListener('mouseup', this.onMouseUp);
     document.removeEventListener('mousemove', this.onMouseMove);
 
-    // if (onChange) {
-    //   onChange(this.state.sizes);
-    // }
+    if (this.props.onResizeEnd) {
+      this.props.onResizeEnd();
+    }
   }
 
   getPaneProp(key) {
@@ -341,7 +347,9 @@ SplitPane.propTypes = {
   className: PropTypes.string,
   split: PropTypes.oneOf(['vertical', 'horizontal']),
   resizerSize: PropTypes.number,
-  onChange: PropTypes.func
+  onChange: PropTypes.func,
+  onResizeStart: PropTypes.func,
+  onResizeEnd: PropTypes.func,
 };
 
 SplitPane.defaultProps = {
