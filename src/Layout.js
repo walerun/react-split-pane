@@ -33,6 +33,10 @@ export default class TileLayout extends Component {
     onChange && onChange(newValue);
   }
 
+  onResizeStart = (path, index) => {
+    this.props.onResizeStart && this.props.onResizeStart(index, path);
+  }
+
   renderRecursively(node, path) {
     if (node.panes) {
       const split = node.direction === "column" ? "vertical" : "horizontal";
@@ -46,7 +50,16 @@ export default class TileLayout extends Component {
           </Pane>;
       });
 
-      return <SplitPane split={split} onChange={this.onChange.bind(null, path)}>{panes}</SplitPane>;
+      return (
+        <SplitPane
+          split={split}
+          onChange={this.onChange.bind(null, path)}
+          onResizeStart={this.onResizeStart.bind(null, path)}
+          onResizeEnd={this.props.onResizeEnd}
+        >
+          {panes}
+        </SplitPane>
+      );
     }
 
     return this.props.renderTile(node.id, path);

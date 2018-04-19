@@ -102,7 +102,13 @@ class ControlledExample extends Component {
   
         <div className="example">
   
-          <Layout value={this.state.value} onChange={this.onChange} renderTile={id => `Tile ${id}`}/>
+          <Layout
+            value={this.state.value}
+            onChange={this.onChange}
+            onResizeStart={() => console.log("start")}
+            onResizeEnd={() => console.log("end")}
+            renderTile={id => `Tile ${id}`}
+          />
   
         </div>
   
