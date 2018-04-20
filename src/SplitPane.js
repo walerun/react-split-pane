@@ -77,7 +77,7 @@ class SplitPane extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    
+    this.setState({sizes: this.getPaneProp("initialSize")});
   }
 
   componentWillUnmount() {
