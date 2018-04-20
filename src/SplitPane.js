@@ -69,7 +69,7 @@ class SplitPane extends Component {
   constructor(props) {
     super(props);
 
-    const sizes = this.getPaneProp("initialSize");
+    const sizes = this.getPaneProp("initialSize", props);
 
     this.state = {
       sizes
@@ -77,7 +77,7 @@ class SplitPane extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({sizes: this.getPaneProp("initialSize")});
+    this.setState({sizes: this.getPaneProp("initialSize", nextProps)});
   }
 
   componentWillUnmount() {
@@ -138,8 +138,8 @@ class SplitPane extends Component {
     }
   }
 
-  getPaneProp(key) {
-    return React.Children.map(this.props.children, c => c.props[key]);
+  getPaneProp(key, props) {
+    return React.Children.map(props.children, c => c.props[key]);
   }
 
   getPaneDimensions() {
@@ -153,8 +153,8 @@ class SplitPane extends Component {
   onMove(clientX, clientY) {
     const { split, resizerSize, onChange } = this.props;
     const { resizerIndex } = this.state;
-    const minSizes = this.getPaneProp('minSize');
-    const maxSizes = this.getPaneProp('maxSize');
+    const minSizes = this.getPaneProp('minSize', this.props);
+    const maxSizes = this.getPaneProp('maxSize', this.props);
     const dimensions = this.dimensions;
     
     const sizesPx = dimensions.map(d => split === "vertical" ? d.width : d.height);
