@@ -168,7 +168,6 @@ class SplitPane extends Component {
     const secondaryUnit = getUnit(sizes[resizerIndex + 1]);
     const primary = dimensions[resizerIndex];
     const secondary = dimensions[resizerIndex + 1];
-    
 
     if (
       (split === 'vertical' &&
@@ -212,28 +211,26 @@ class SplitPane extends Component {
       ) {
         sizesPx[resizerIndex] = primarySize;
         sizesPx[resizerIndex + 1] = secondarySize;
-            
+
+        let updateRatio;
+
         if (primaryUnit !== "ratio") {
           sizes[resizerIndex] = this.convertUnits(primarySize, primaryUnit, splitPaneSize);
         } else {
-          sizes = sizes.map((s, idx) => {
-            if (getUnit(s) === "ratio") {
-              s = +sizesPx[idx];
-            }
-
-            return s;
-          });
+          updateRatio = true;
         }
 
         if (secondaryUnit !== "ratio") {
           sizes[resizerIndex + 1] = this.convertUnits(secondarySize, secondaryUnit, splitPaneSize);
         } else {
-          sizes = sizes.map((s, idx) => {
-            if (getUnit(s) === "ratio") {
-              s = +sizesPx[idx];
-            }
-            return s;
-          });
+          updateRatio = true;
+        }
+
+        if (updateRatio) {
+          const ratioIdx = sizes.map((s, idx) => getUnit(s) === "ratio" ? idx : -1).filter(idx => idx >= 0);
+          let ratio = ratioIdx.length === 1 ? [1] : ratioIdx.map(i => sizesPx[i]);
+
+          ratioIdx.forEach((i, idx) => sizes[i] = ratio[idx]);
         }
 
         this.setState({sizes});

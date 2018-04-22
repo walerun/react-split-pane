@@ -3,6 +3,7 @@ import {render} from 'react-dom';
 import SplitPane from '../lib/SplitPane';
 import Pane from "../lib/Pane";
 import Layout from "../lib/Layout";
+import lodash from "lodash";
 
 const config = {
   "direction": "row",
@@ -60,14 +61,11 @@ const config3 = {
       panes: [
         {
           id: "topactions",
+          // size: "100px"
+        },
+        {
+          id: "product-analysis-subclass-bottom",
           size: 2
-        },
-        {
-          id: "product-analysis-subclass-top",
-          size: "10%"
-        },
-        {
-          id: "product-analysis-subclass-bottom"
         },
         {
           id: "product-analysis-subclass-bottom 2"
@@ -82,13 +80,20 @@ class ControlledExample extends Component {
     super(props);
 
     this.state = {
-      value: config
+      value: config3
     };
   }
 
   onChange = (value) => {
     this.setState({value});
   };
+
+  renderTile = (id, path) => {
+    const x = path.map(p => `panes[${p}]`).join(".") + ".size";
+    // console.log(id, x, lodash.get(this.state.value, x));
+    const size = lodash.get(this.state.value, x) || 1;
+    return `${id} (${size})`;
+  }
 
   render() {
     return (
@@ -105,10 +110,35 @@ class ControlledExample extends Component {
           <Layout
             value={this.state.value}
             onChange={this.onChange}
-            onResizeStart={() => console.log("start")}
-            onResizeEnd={() => console.log("end")}
-            renderTile={id => `Tile ${id}`}
+            renderTile={this.renderTile}
           />
+  
+        </div>
+  
+      </section>
+    );
+  }
+}
+
+class UncontrolledExample extends Component {
+  render() {
+    return (
+      <section>
+  
+        <pre className="source">
+          {`
+          <Layout value={}/>
+          `}
+        </pre>
+  
+        <div className="example">
+  
+          <SplitPane split="vertical">
+            <Pane>pane 1</Pane>
+            <Pane>or you can use a plain old div</Pane>
+            <Pane initialSize="15%" minSize="10%" maxSize="500px">Using a Pane allows you to specify any constraints
+              directly</Pane>
+          </SplitPane>
   
         </div>
   
@@ -768,6 +798,7 @@ const SubComponentExample = () => {
 
 const examples = {
   ControlledExample,
+  UncontrolledExample,
   SimpleExample,
   SimpleNestedExample,
   MultiplePropsNestedExample,
