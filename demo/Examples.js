@@ -75,12 +75,34 @@ const config3 = {
   ]
 };
 
+const config4 = {
+  "direction": "column",
+  "panes": [
+      {
+        "id": "pane-1",
+        "size": "200px"
+      },
+      {
+        "id": "pane-2",
+        "size": "25%"
+      },
+      {
+        "id": "pane-3",
+        "size": 1
+      },
+      {
+        "id": "pane-4",
+        "size": 2
+      }
+  ]
+};
+
 class ControlledExample extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      value: config3
+      value: config4
     };
   }
 
@@ -89,9 +111,9 @@ class ControlledExample extends Component {
   };
 
   renderTile = (id, path) => {
-    const x = path.map(p => `panes[${p}]`).join(".") + ".size";
+    const p = path.map(p => `panes[${p}]`).join(".") + ".size";
     // console.log(id, x, lodash.get(this.state.value, x));
-    const size = lodash.get(this.state.value, x) || 1;
+    const size = lodash.get(this.state.value, p) || 1;
     return `${id} (${size})`;
   }
 
