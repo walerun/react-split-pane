@@ -83,15 +83,20 @@ class SplitPane extends Component {
   componentWillUnmount() {
     document.removeEventListener('mouseup', this.onMouseUp);
     document.removeEventListener('mousemove', this.onMouseMove);
-    // document.removeEventListener('touchmove', this.onTouchMove);
-    window.removeEventListener('resize', this.resize);
+
+    document.removeEventListener('touchmove', this.onTouchMove);
+    document.removeEventListener('touchend', this.onMouseUp);
   }
 
   onMouseDown = (event, resizerIndex) => {
+    event.preventDefault();
+
     this.onDown(resizerIndex);
   }
 
   onTouchStart = (event, resizerIndex) => {
+    event.preventDefault();
+
     this.onDown(resizerIndex);
   }
 
@@ -107,6 +112,10 @@ class SplitPane extends Component {
     document.addEventListener('mousemove', this.onMouseMove);
     document.addEventListener('mouseup', this.onMouseUp);
 
+    document.addEventListener('touchmove', this.onTouchMove);
+    document.addEventListener('touchend', this.onMouseUp);
+    // document.addEventListener('touchcancel', this.onMouseUp);
+
     if (onResizeStart) {
       onResizeStart(resizerIndex);
     }
@@ -116,22 +125,28 @@ class SplitPane extends Component {
     });
   }
 
-  onMouseMove = (e) => {
-    e.stopPropagation();
-    e.preventDefault();
+  onMouseMove = (event) => {
+    event.preventDefault();
 
-    this.onMove(e.clientX, e.clientY);
+    this.onMove(event.clientX, event.clientY);
   }
 
   onTouchMove = (event) => {
-    e.stopPropagation();
-    e.preventDefault();
-    this.onMove(event.touches[0].clientX, event.touches[0].clientY);
+    event.preventDefault();
+
+    const {clientX, clientY} = event.touches[0];
+
+    this.onMove(clientX, clientY);
   }
 
-  onMouseUp = () => {
+  onMouseUp = (event) => {
+    event.preventDefault();
+
     document.removeEventListener('mouseup', this.onMouseUp);
     document.removeEventListener('mousemove', this.onMouseMove);
+
+    document.removeEventListener('touchmove', this.onTouchMove);
+    document.removeEventListener('touchend', this.onMouseUp);
 
     if (this.props.onResizeEnd) {
       this.props.onResizeEnd();
@@ -304,8 +319,7 @@ class SplitPane extends Component {
             ref={this.setResizerRef.bind(null, resizerIndex)}
             split={split}
             onMouseDown={this.onMouseDown}
-            // onTouchStart={this.onTouchStart}
-            // onTouchEnd={this.onMouseUp}
+            onTouchStart={this.onTouchStart}
           />
         );
         resizerIndex++;
