@@ -11,7 +11,7 @@ export default class TileLayout extends Component {
     value: PropTypes.object
   };
 
-  onChange = (path, size) => {
+  onChange = (path, sizes) => {
     const {value, onChange} = this.props;
     const newValue = Object.assign({}, value);
 
@@ -25,7 +25,7 @@ export default class TileLayout extends Component {
     // update sizes
     const newPanes = node.panes.map((pane, idx) => {
       return Object.assign({}, pane, {
-        size: size[idx]
+        size: sizes[idx]
       })
     });
     node.panes = newPanes;
@@ -45,7 +45,7 @@ export default class TileLayout extends Component {
 
         const p = path.concat(idx);
 
-        return <Pane key={p} initialSize={size} maxSize={maxSize} minSize={minSize}>
+        return <Pane key={p} size={size} maxSize={maxSize} minSize={minSize}>
             {this.renderRecursively(config, p)}
           </Pane>;
       });
@@ -56,6 +56,7 @@ export default class TileLayout extends Component {
           onChange={this.onChange.bind(null, path)}
           onResizeStart={this.onResizeStart.bind(null, path)}
           onResizeEnd={this.props.onResizeEnd}
+          controlled={true}
         >
           {panes}
         </SplitPane>

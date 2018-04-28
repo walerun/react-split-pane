@@ -79,20 +79,36 @@ const config4 = {
   "direction": "column",
   "panes": [
       {
+        "id": "pane-2",
+        "size": 1
+      },
+      {
         "id": "pane-1",
         "size": "200px"
       },
       {
-        "id": "pane-2",
-        "size": "25%"
-      },
-      {
         "id": "pane-3",
-        "size": 1
+        "size": 2
       },
       {
         "id": "pane-4",
-        "size": 2
+        "size": 1
+      },
+  ]
+};
+
+const config5 = {
+  "direction": "column",
+  "panes": [
+      {
+          "id": "filtered-dimensions-top"
+      },
+      {
+          "id": "filtered-dimensions-bottom"
+      },
+      {
+          "id": "filtered-dimensions-bottom1",
+          "size": "50%"
       }
   ]
 };
@@ -102,7 +118,7 @@ class ControlledExample extends Component {
     super(props);
 
     this.state = {
-      value: config4
+      value: config
     };
   }
 
@@ -132,6 +148,7 @@ class ControlledExample extends Component {
           <Layout
             value={this.state.value}
             onChange={this.onChange}
+            // onChange={(x) => console.log(x)}
             renderTile={this.renderTile}
           />
   
@@ -195,7 +212,7 @@ class SimpleExample extends Component {
         <pre className="source">
           {`
           <SplitPane split="vertical">
-            <Pane>You can use a Pane component</Pane>
+            <Pane maxSize="200px">You can use a Pane component</Pane>
             <div>or you can use a plain old div</div>
             <Pane initialSize="25%" minSize="10%" maxSize="500px">Using a Pane allows you to specify any constraints
               directly</Pane>
@@ -206,9 +223,9 @@ class SimpleExample extends Component {
         <div className="example">
   
           <SplitPane split="vertical" onChangeSize={this.handleChangeSize}>
-            <Pane initialSize={sizes[0]} maxSize="200px"><div>You can use a Pane component1</div><div>test</div></Pane>
+            <Pane maxSize="200px"><div>You can use a Pane component1</div><div>test</div></Pane>
             <div>or you can use a plain old div</div>
-            <Pane initialSize="15%" minSize="10%" maxSize="500px">Using a Pane allows you to specify any constraints
+            <Pane initialSize="35%" minSize="10%" maxSize="500px">Using a Pane allows you to specify any constraints
               directly</Pane>
           </SplitPane>
   

@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 
 import prefixAll from 'inline-style-prefixer/static';
 
+import {getUnit} from "./SplitPane";
+
 const RowPx = ({ useInitial, initialSize, size, minSize, maxSize }) => ({
   width: useInitial && initialSize ? initialSize : size + 'px',
   minWidth: minSize,
@@ -17,10 +19,10 @@ const ColumnPx = ({ useInitial, initialSize, size, minSize, maxSize }) => ({
   outline: 'none',
 });
 
-const RowFlex = ({ initialSize, minSize, maxSize }) => {
+const RowFlex = ({ initialSize, size, minSize, maxSize }) => {
+  const value = size ? size : initialSize;
 
   const style = {
-    // flex: initialSize,
     minWidth: minSize,
     maxWidth: maxSize,
     display: 'flex',
@@ -28,17 +30,19 @@ const RowFlex = ({ initialSize, minSize, maxSize }) => {
     position: 'relative'
   };
 
-  if (typeof initialSize === "number") {
-    style.flex = initialSize;
+  if (getUnit(value) === "ratio") {
+    style.flex = value;
   } else {
     style.flexGrow = 0;
-    style.width = initialSize;
+    style.width = value;
   }
 
   return style;
 };
 
-const ColumnFlex = ({ initialSize, minSize, maxSize }) => {
+const ColumnFlex = ({ initialSize, size, minSize, maxSize }) => {
+  const value = size ? size : initialSize;
+
   const style = {
     minHeight: minSize,
     maxHeight: maxSize,
@@ -48,11 +52,11 @@ const ColumnFlex = ({ initialSize, minSize, maxSize }) => {
     position: 'relative'
   };
 
-  if (typeof initialSize === "number") {
-    style.flex = initialSize;
+  if (getUnit(value) === "ratio") {
+    style.flex = value;
   } else {
     style.flexGrow = 0;
-    style.height = initialSize;
+    style.height = value;
   }
 
   return style;
@@ -64,10 +68,8 @@ class Pane extends PureComponent {
     const {
       children,
       className,
-      resized,
       split,
       useInitial,
-      initialSize,
     } = this.props;
 
     let prefixedStyle;
@@ -95,9 +97,9 @@ Pane.propTypes = {
 };
 
 Pane.defaultProps = {
-  initialSize: 1,
+  initialSize: "1",
   split: 'vertical',
-  minSize: '0px',
+  minSize: '0',
   maxSize: '100%',
 };
 
