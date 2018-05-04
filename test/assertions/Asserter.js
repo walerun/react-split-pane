@@ -110,8 +110,17 @@ const asserter = (jsx, dimensions = {}) => {
     },
     assertSizes(expected) {
       const panes = scryRenderedComponentsWithType(component, Pane);
-      const actualSizes = panes.map(_ => +_.props['size']);
+      const actualSizes = panes.map(_ => _.props['size']);
       expect(actualSizes).to.eql(expected, 'Unexpected sizes');
+      return this;
+    },
+    assertSizesPx(expected) {
+      const panes = scryRenderedComponentsWithType(component, Pane);
+      const actualSizes = panes.map(_ => {
+        const sizeProp = component.props['split'] === "vertical" ? 'width' : 'height';
+        return findDOMNode(_).getBoundingClientRect()[sizeProp];
+      });
+      expect(actualSizes).to.eql(expected, 'Unexpected sizes in px');
       return this;
     },
 
@@ -138,9 +147,10 @@ const asserter = (jsx, dimensions = {}) => {
     dragResizer(resizerIndex, mousePositionDifference) {
       const coordinates = calculateMouseMove(resizerIndex, mousePositionDifference);
       const [startPosition, ...moveCoordinates] = coordinates;
-      component.onMouseDown(startPosition, resizerIndex);
-      moveCoordinates.forEach(coordinate => component.onMouseMove(coordinate));
-      component.onMouseUp();
+      const event = {preventDefault(){}, button: 0};
+      component.onMouseDown(event, resizerIndex);
+      moveCoordinates.forEach(coordinate => component.onMouseMove({...coordinate, preventDefault(){}}));
+      component.onMouseUp(event);
       return this;
     },
   };

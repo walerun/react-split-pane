@@ -21,6 +21,9 @@ const ColumnStyle = glamorous.div({
 
   minHeight: '100%',
   width: '100%',
+  '& > *': {
+    boxSizing: 'border-box'
+  }
 });
 
 const RowStyle = glamorous.div({
@@ -31,7 +34,6 @@ const RowStyle = glamorous.div({
   outline: 'none',
   overflow: 'hidden',
   userSelect: 'text',
-
 });
 
 function convert(str, size) {
@@ -75,7 +77,7 @@ function convertUnits(size, unit, containerSize) {
     case "px":
       return `${size.toFixed(2)}px`;
     case "ratio":
-      return size.toFixed(2) * 100;
+      return (size * 100).toFixed(0);
   }
 }
 
@@ -225,25 +227,17 @@ class SplitPane extends Component {
     let splitPaneSizePx;
 
     if (split === 'vertical') {
-      const resizerLeft = clientX - (resizerSize / 2);
-      const resizerRight = clientX + (resizerSize / 2);
-
-      primarySizePx = resizerLeft - primary.left;
-      secondarySizePx = secondary.right - resizerRight;
+      primarySizePx = clientX - primary.left;
+      secondarySizePx = secondary.right - clientX;
       splitPaneSizePx = splitPaneDimensions.width;
     } else {
-      const resizerTop = clientY - (resizerSize / 2);
-      const resizerBottom = clientY + (resizerSize / 2);
-
-      primarySizePx = resizerTop - primary.top;
-      secondarySizePx = secondary.bottom - resizerBottom;
+      primarySizePx = clientY - primary.top;
+      secondarySizePx = secondary.bottom - clientY;
       splitPaneSizePx = splitPaneDimensions.height;
     }
 
     sizesPx[resizerIndex] = primarySizePx;
     sizesPx[resizerIndex + 1] = secondarySizePx;
-
-    // const sizesPx = [primarySizePx, secondarySizePx];
 
     const primaryMinSizePx = convert(minSizes[resizerIndex], splitPaneSizePx);
     const secondaryMinSizePx = convert(minSizes[resizerIndex + 1], splitPaneSizePx);
@@ -287,7 +281,7 @@ class SplitPane extends Component {
       });
 
       if (ratioCount === 1) {
-        sizes[lastRatioIdx] = 1;
+        sizes[lastRatioIdx] = '1';
       }
     }
 
