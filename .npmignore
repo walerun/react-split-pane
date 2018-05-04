@@ -2,3 +2,12 @@ src/
 .babelrc
 demo/
 test/
+.storybook/
+.editorconfig
+.gitignore
+.npmignore
+.travis.yml
+circle.yml
+lcov.info
+tsconfig.json
+package-lock.json
