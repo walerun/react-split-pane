@@ -11,3 +11,4 @@ circle.yml
 lcov.info
 tsconfig.json
 package-lock.json
+stories/
